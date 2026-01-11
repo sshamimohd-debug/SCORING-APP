@@ -1,0 +1,16 @@
+{
+  "name": "MPGB Premier League",
+  "short_name": "MPGB PL",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0b1020",
+  "theme_color": "#0b1020",
+  "icons": [
+    {
+      "src": "assets/icons/shield.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
