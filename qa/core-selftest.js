@@ -1,0 +1,12 @@
+const fs=require('fs'),vm=require('vm');
+const app={className:'',innerHTML:''};
+const store={};
+const document={body:{appendChild(){},innerHTML:''},getElementById:id=>id==='app'?app:null,createElement:()=>({remove(){},click(){},style:{}}),addEventListener(){},querySelectorAll:()=>[]};
+const localStorage={getItem:k=>store[k]??null,setItem:(k,v)=>store[k]=String(v),removeItem:k=>delete store[k]};
+const ctx={console,document,localStorage,location:{search:''},setTimeout:fn=>{fn();return 1},clearTimeout(){},Blob:function(){},URL:{createObjectURL:()=>'',revokeObjectURL(){}},FileReader:function(){}};ctx.window=ctx;vm.createContext(ctx);
+const src=fs.readFileSync('js/cricpro-v3.js','utf8');
+vm.runInContext(src,ctx,{filename:'cricpro-v3.js'});
+if(!ctx.CricProQA||typeof ctx.CricProQA.selfTest!=='function')throw new Error('QA hook missing');
+const r=ctx.CricProQA.selfTest();
+console.log(JSON.stringify(r,null,2));
+if(r.failed)process.exit(1);
