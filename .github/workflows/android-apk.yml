@@ -1,7 +1,7 @@
 name: Build Android APK
 on:
   push:
-    branches: [ main, chatgpt/cricpro-score-v1 ]
+    branches: [ main, chatgpt/rules-v4 ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -16,12 +16,23 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v3
-      - name: Apply runtime hardening
-        run: python3 qa/apply-hotfix.py
-      - name: Core JavaScript syntax check
-        run: node --check js/cricpro-v3.js
-      - name: Core scorer functional self-test
-        run: node qa/core-selftest.js
+      - name: Reconstruct v4 scorer
+        run: python3 qa/reconstruct-v4.py
+      - name: JavaScript syntax checks
+        run: |
+          node --check js/cricket-rules.js
+          node --check js/cricpro-v4.js
+      - name: Cricket rules regression suite
+        run: node qa/rules-v4.test.js
+      - name: App contract checks
+        run: |
+          grep -q 'js/cricket-rules.js' index.html
+          grep -q 'js/cricpro-v4.js' index.html
+          grep -q 'Opening Players' js/cricpro-v4.js
+          grep -q 'Over Complete' js/cricpro-v4.js
+          grep -q 'FREE HIT' js/cricpro-v4.js
+          grep -q 'Total Wide runs' js/cricpro-v4.js
+          grep -q 'Replace Bowler Mid-over' js/cricpro-v4.js
       - name: Prepare offline web assets
         run: |
           mkdir -p app/src/main/assets/www
@@ -32,14 +43,16 @@ jobs:
           gradle-version: '8.9'
       - name: Build debug APK
         run: gradle assembleDebug --stacktrace
-      - name: Verify APK exists
+      - name: Verify APK exists and v4 assets packaged
         run: |
           test -s app/build/outputs/apk/debug/app-debug.apk
-          ls -lh app/build/outputs/apk/debug/app-debug.apk
           unzip -t app/build/outputs/apk/debug/app-debug.apk >/dev/null
+          unzip -l app/build/outputs/apk/debug/app-debug.apk | grep 'assets/www/js/cricket-rules.js'
+          unzip -l app/build/outputs/apk/debug/app-debug.apk | grep 'assets/www/js/cricpro-v4.js'
+          ls -lh app/build/outputs/apk/debug/app-debug.apk
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: CricPro-Score-Android
+          name: CricPro-Score-v4-Rules-QA
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
