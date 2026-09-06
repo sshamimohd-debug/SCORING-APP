@@ -1,7 +1,7 @@
 name: Build Android APK
 on:
   push:
-    branches: [ main, chatgpt/rules-v4 ]
+    branches: [ main, chatgpt/rules-v4, chatgpt/pro-ui-stats-v5 ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -22,17 +22,30 @@ jobs:
         run: |
           node --check js/cricket-rules.js
           node --check js/cricpro-v4.js
+          node --check js/cricpro-v5-pro.js
       - name: Cricket rules regression suite
         run: node qa/rules-v4.test.js
       - name: App contract checks
         run: |
           grep -q 'js/cricket-rules.js' index.html
           grep -q 'js/cricpro-v4.js' index.html
+          grep -q 'css/cricpro-v5-pro.css' index.html
+          grep -q 'js/cricpro-v5-pro.js' index.html
           grep -q 'Opening Players' js/cricpro-v4.js
           grep -q 'Over Complete' js/cricpro-v4.js
           grep -q 'FREE HIT' js/cricpro-v4.js
           grep -q 'Total Wide runs' js/cricpro-v4.js
           grep -q 'Replace Bowler Mid-over' js/cricpro-v4.js
+          grep -q 'Run progression' js/cricpro-v5-pro.js
+          grep -q 'Current partnership' js/cricpro-v5-pro.js
+          grep -q 'Auto commentary' js/cricpro-v5-pro.js
+          grep -q 'Batting leaders' js/cricpro-v5-pro.js
+          grep -q 'Bowling leaders' js/cricpro-v5-pro.js
+          grep -q "WICKET" js/cricpro-v5-pro.js
+          grep -q "SIX" js/cricpro-v5-pro.js
+          grep -q "FOUR" js/cricpro-v5-pro.js
+          grep -q 'cp-event-pop' css/cricpro-v5-pro.css
+          grep -q 'cp-chart' css/cricpro-v5-pro.css
       - name: Prepare offline web assets
         run: |
           mkdir -p app/src/main/assets/www
@@ -43,16 +56,18 @@ jobs:
           gradle-version: '8.9'
       - name: Build debug APK
         run: gradle assembleDebug --stacktrace
-      - name: Verify APK exists and v4 assets packaged
+      - name: Verify APK exists and v5 assets packaged
         run: |
           test -s app/build/outputs/apk/debug/app-debug.apk
           unzip -t app/build/outputs/apk/debug/app-debug.apk >/dev/null
           unzip -l app/build/outputs/apk/debug/app-debug.apk | grep 'assets/www/js/cricket-rules.js'
           unzip -l app/build/outputs/apk/debug/app-debug.apk | grep 'assets/www/js/cricpro-v4.js'
+          unzip -l app/build/outputs/apk/debug/app-debug.apk | grep 'assets/www/js/cricpro-v5-pro.js'
+          unzip -l app/build/outputs/apk/debug/app-debug.apk | grep 'assets/www/css/cricpro-v5-pro.css'
           ls -lh app/build/outputs/apk/debug/app-debug.apk
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: CricPro-Score-v4-Rules-QA
+          name: CricPro-Score-v5-Pro-QA
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
