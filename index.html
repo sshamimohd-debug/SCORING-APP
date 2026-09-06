@@ -1,73 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <meta name="theme-color" content="#0b1020"/>
-  <link rel="manifest" href="manifest.json"/>
-  <link rel="stylesheet" href="css/theme-dark.css"/>
-  <title>MPGB Premier League - Live</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#07111f">
+<meta name="mobile-web-app-capable" content="yes">
+<title>CricPro Score</title>
+<link rel="stylesheet" href="css/cricpro-v2.css">
 </head>
-<body data-page="home">
-  <div class="topbar">
-    <a id="navLeft" href="#" aria-label="Back"></a>
-    <div class="brand">
-      <img class="logo" src="assets/icons/shield.svg" alt="logo"/>
-      <div class="title" id="brandTitle">MPGB PREMIER LEAGUE</div>
-    </div>
-    <div id="navRight"></div>
-  </div>
-
-  <div class="container">
-    
-  <div class="card">
-    <div class="matchHeader">
-      <div id="teams"></div>
-      <div id="score"></div>
-
-      <div class="progressWrap">
-        <div class="progressBar" id="progress"></div>
-        <div class="progressText" id="progressText"></div>
-      </div>
-
-      <div id="rates"></div>
-    </div>
-
-    <div class="cardPad">
-      <div id="lines"></div>
-
-      <div class="row" style="margin-top:10px">
-        <div class="h2">Quick Scoring</div>
-        <div class="badge" id="lastBall"></div>
-      </div>
-
-      <div class="gridBtns">
-        <div class="btn" id="b0">0</div>
-        <div class="btn" id="b1">1</div>
-        <div class="btn" id="b2">2</div>
-        <div class="btn" id="b4">4</div>
-        <div class="btn" id="b6">6</div>
-        <div class="btn" id="bw">W</div>
-      </div>
-
-      <div class="btnSmallRow">
-        <div class="btn btnSub" id="bnb">NB</div>
-        <div class="btn btnSub" id="bwd">WD</div>
-      </div>
-
-      <div class="notice" id="notice">
-        Firebase not configured. Running in offline/local mode (localStorage demo).  
-        For realtime multi-user scoring, add Firebase config in <code class="kbd">js/firebase.js</code>.
-      </div>
-    </div>
-  </div>
-
-  </div>
-
-  <div class="footerTabs">
-    <div class="tabs" id="tabs"></div>
-  </div>
-
-  <script type="module" src="js/app.js"></script>
-</body>
+<body><div id="app" class="app"></div><script src="js/cricpro-v2.js"></script></body>
 </html>
